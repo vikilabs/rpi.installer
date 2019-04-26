@@ -106,8 +106,9 @@ fi
 
 
 echo $log_i"installing image to sd card ( "$sd_card_path" )"
-#sudo dd bs=1M if=$image_name of=$sd_card_path
-ls
+echo $log_i"kindly wait, operation will take 5 to 10 minutes ..."
+
+sudo dd bs=1M if=$image_name of=$sd_card_path > /dev/null
 
 if [ $? -ne 0 ]; then
     echo
@@ -117,7 +118,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo
-echo $log_s"installed ( "$image_name" ) to ( "$sd_card_path" )"
+echo $log_s"installed image to ( "$sd_card_path" )"
 echo
 
 
