@@ -1,0 +1,117 @@
+image_name=$1
+sd_card_path=$2
+skip=0
+
+sudo ls > /dev/null
+
+log_s="[ success..] "
+log_i="[ status...] "
+log_e="[ error....] "
+log_f="[ failure..] "
+echo 
+
+if [ "$#" -lt 2 ]; then
+    echo " COMMAND USAGE : "
+    echo
+    echo "     rpi_install <image_name> <sd_card: device_name>"
+    echo
+    echo
+    echo " Example 1: "
+    echo
+    echo "     rpi_install ./raspbian-stretch.img /dev/sdb"
+    echo
+    echo
+    echo " Example 1: "
+    echo
+    echo "     rpi_install ./raspbian-stretch.img /dev/sdb --skip-format"
+    echo
+    echo " Additional Note: "
+    echo
+    echo "     sudo fdisk -l : List all mounted disks in the system"
+    echo
+    echo
+    exit 1
+fi
+
+
+if [ ! -z $3 ]; then
+   if [ $3 == "--skip-format" ]; then
+        skip=1     
+        echo $log_i"installing image without formatting sd card"
+   fi
+fi
+
+if [ $skip -eq 0 ]; then
+
+    echo $log_i"unmounting sd card ( "$sd_card_path" )"
+    sudo umount $sd_card_path > /dev/null 2>&1
+    
+    if [ $? -ne 0 ]; then
+        echo $log_i"unmount failed ( " $sd_card_path " )"
+
+
+        #UNMOUNT DISK_1
+
+        disk_1=$sd_card_path"1"
+        echo $log_i"trying to unmount ( "$disk_1" )"
+        sudo umount $disk_1 > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo $log_e"unmount failed ( "$disk_1" )"
+            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            exit 1
+        fi
+
+        echo $log_i"verify unmount ( "$disk_1" )"
+        sudo findmnt $disk_1 > /dev/null 2>&1
+        
+        if [ $? -eq 0 ]; then
+            echo $log_e"unmount failed ( "$disk_1" )"
+            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            exit 1
+        fi
+
+        #UNMOUNT DISK_2
+
+        disk_2=$sd_card_path"2"
+        echo $log_i"trying to unmount ( "$disk_2" )"
+        sudo umount $disk_2 > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo $log_e"unmount failed ( "$disk_2" )"
+            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            exit 1
+        fi
+   
+        echo $log_i"verify unmount ( "$disk_2" )"
+        sudo findmnt $disk_2 > /dev/null 2>&1
+        
+        if [ $? -eq 0 ]; then
+            echo $log_e"unmount failed ( "$disk_2" )"
+            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            exit 1
+        fi
+
+
+    fi
+
+
+    echo $log_i"formatting sd card"
+    sudo mkdosfs -s 128 -F 32 -I $sd_card_path
+
+fi
+
+
+echo $log_i"installing ( "$image_name" ) to sd card ( " $sd_card_path" )"
+sudo dd bs=1M if=$image_name of=$sd_card_path
+
+if [ $? -ne 0 ]; then
+    echo
+    echo $log_e"installation failed"
+    echo
+    exit 1
+fi
+
+echo
+echo $log_s"installed ( " $image_name " ) to ( " $sd_card_path " )"
+echo
+
+
