@@ -68,6 +68,8 @@ if [ $skip -eq 0 ]; then
             echo $log_e"unmount failed ( "$disk_1" )"
             echo $log_e"format sd card manually and try again with '--skip_format' option"
             exit 1
+        else
+            echo $log_s"unmount disk"    
         fi
 
         #UNMOUNT DISK_2
@@ -88,14 +90,17 @@ if [ $skip -eq 0 ]; then
             echo $log_e"unmount failed ( "$disk_2" )"
             echo $log_e"format sd card manually and try again with '--skip_format' option"
             exit 1
+        else
+            echo $log_s"unmount disk"    
         fi
 
-
+    else
+        echo $log_s"unmount sd card"    
     fi
 
 
     echo $log_i"formatting sd card"
-    sudo mkdosfs -s 128 -F 32 -I $sd_card_path
+    sudo mkdosfs -s 128 -F 32 -I $sd_card_path > /dev/null
 
 fi
 
@@ -111,7 +116,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo
-echo $log_s"installed ( " $image_name " ) to ( " $sd_card_path " )"
+echo $log_s"installed ( "$image_name" ) to ( "$sd_card_path" )"
 echo
 
 
