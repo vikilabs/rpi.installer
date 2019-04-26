@@ -105,7 +105,7 @@ if [ $skip -eq 0 ]; then
 fi
 
 
-echo $log_i"installing ( "$image_name" ) to sd card ( " $sd_card_path" )"
+echo $log_i"installing image to sd card ( "$sd_card_path" )"
 sudo dd bs=1M if=$image_name of=$sd_card_path
 
 if [ $? -ne 0 ]; then
