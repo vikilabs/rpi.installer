@@ -57,7 +57,7 @@ if [ $skip -eq 0 ]; then
         sudo umount $disk_1 > /dev/null 2>&1
         if [ $? -ne 0 ]; then
             echo $log_e"unmount failed ( "$disk_1" )"
-            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            echo $log_e"format sd card manually and try again with '--skip-format' option"
             exit 1
         fi
 
@@ -66,7 +66,7 @@ if [ $skip -eq 0 ]; then
         
         if [ $? -eq 0 ]; then
             echo $log_e"unmount failed ( "$disk_1" )"
-            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            echo $log_e"format sd card manually and try again with '--skip-format' option"
             exit 1
         else
             echo $log_s"unmount disk"    
@@ -79,7 +79,7 @@ if [ $skip -eq 0 ]; then
         sudo umount $disk_2 > /dev/null 2>&1
         if [ $? -ne 0 ]; then
             echo $log_e"unmount failed ( "$disk_2" )"
-            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            echo $log_e"format sd card manually and try again with '--skip-format' option"
             exit 1
         fi
    
@@ -88,7 +88,7 @@ if [ $skip -eq 0 ]; then
         
         if [ $? -eq 0 ]; then
             echo $log_e"unmount failed ( "$disk_2" )"
-            echo $log_e"format sd card manually and try again with '--skip_format' option"
+            echo $log_e"format sd card manually and try again with '--skip-format' option"
             exit 1
         else
             echo $log_s"unmount disk"    
@@ -106,7 +106,8 @@ fi
 
 
 echo $log_i"installing image to sd card ( "$sd_card_path" )"
-sudo dd bs=1M if=$image_name of=$sd_card_path
+#sudo dd bs=1M if=$image_name of=$sd_card_path
+ls
 
 if [ $? -ne 0 ]; then
     echo
